@@ -1,0 +1,33 @@
+{
+  "name": "mmall-fe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "set WEBPACK_ENV = dev && webpack-dev-server --inline --port 8088",
+    "dist": "set WEBPACK_ENV = dev && webpack -p"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DaoYangM/mmall-fe.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DaoYangM/mmall-fe/issues"
+  },
+  "homepage": "https://github.com/DaoYangM/mmall-fe#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "css-loader": "^0.28.11",
+    "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "file-loader": "^1.1.11",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "style-loader": "^0.20.3",
+    "url-loader": "^1.0.1",
+    "webpack": "^4.6.0",
+    "webpack-cli": "^2.0.14",
+    "webpack-dev-server": "^3.1.3"
+  }
+}
