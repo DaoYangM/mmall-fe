@@ -18,7 +18,8 @@ config = {
     entry: {
         'common': ['./src/page/common/index.js'],
         'index': ['./src/page/index/index.js'],
-        'login': ['./src/page/login/index.js']
+        'login': ['./src/page/login/index.js'],
+        'result': ['./src/page/result/index.js']
     },
     output: {
         path: 'D:\\Code\\FE\\mmall-fe\\mmall-fe\\dist',
@@ -50,7 +51,8 @@ config = {
 
         new Ex("css/[name].css"),
 
-        new HtmlWebpackPlugin(getHtmlConfig('index'))
+        new HtmlWebpackPlugin(getHtmlConfig('index')),
+        new HtmlWebpackPlugin(getHtmlConfig('result'))
     ],
 
     resolve: {
@@ -76,6 +78,10 @@ config = {
             {
                 test: /\.(gif|png|jpg|woff|svg|eot|ttf)\??.*$/,
                 use: ["url-loader?limit=100&name=resource/[name].[ext]"]
+            },
+            {
+                test: /\.string$/,
+                use: "html-loader"
             }
         ]
     }
