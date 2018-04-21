@@ -12,6 +12,7 @@ var _mm = {
             // dataType: param.type || 'json',
             data: param.data || '',
             success: function (result) {
+                console.log("success "+result.code);
                 if (0 === result.code) {
                     typeof param.success === 'function' && param.success(result.target, result.desc);
 
@@ -23,14 +24,15 @@ var _mm = {
                 }
             },
 
-            error: function (error) {
-                typeof param.error === 'function' && param.error(error.statusText);
+            error: function (err) {
+                console.log(err);
+                typeof param.error === 'function' && param.error(err.statusText);
             }
         });
     },
 
     doLogin: function () {
-        window.location.href = './login.html?redirect=' + encodeURIComponent(window.location.href);
+        window.location.href = './user-login.html?redirect=' + encodeURIComponent(window.location.href);
     },
 
     goHome: function() {

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%= require('html-loader!./layout/head-common.html')  %>
+        <title>
+            用户注册 - MMALL
+        </title>
+</head>
+
+<body>
+    <%= require('html-loader!./layout/nav-simple.html')  %>
+        <div class="page-wrap">
+            <div class="w">
+                <div class="user-con">
+                    <div class="user-title">用户注册</div>
+                    <div class="user-box">
+                        <div class="error-item">
+                            <i class="fa fa-minus-circle error-icon"></i>
+                            <p class="err-msg">
+                                error
+                            </p>
+                        </div>
+                        <div class="user-item">
+                            <label for="username" class="user-label">
+                                <i class="fa fa-user"></i>
+                            </label>
+                            <input id="username" class="user-content" type="text" placeholder="用户名">
+                        </div>
+                        <div class="user-item">
+                            <label for="passowrd" class="user-label">
+                                <i class="fa fa-lock"></i>
+                            </label>
+                            <input id="password" class="user-content" type="password" placeholder="密码">
+                        </div>
+                        <div class="user-item">
+                            <label for="passowrd-confirm" class="user-label">
+                                <i class="fa fa-lock"></i>
+                            </label>
+                            <input id="password-confirm" class="user-content" type="password" placeholder="确认密码">
+                        </div>
+                        <div class="user-item">
+                            <label for="phone" class="user-label">
+                                <i class="fa fa-phone"></i>
+                            </label>
+                            <input id="phone" class="user-content" type="text" placeholder="手机">
+                        </div>
+                        <div class="user-item">
+                            <label for="email" class="user-label">
+                                <i class="fa fa-envelope"></i>
+                            </label>
+                            <input id="email" class="user-content" type="email" placeholder="邮箱">
+                        </div>
+                        <div class="user-item">
+                            <label for="question" class="user-label">
+                                <i class="fa fa-question"></i>
+                            </label>
+                            <input id="question" class="user-content" type="text" placeholder="问题">
+                        </div>
+                        <div class="user-item">
+                            <label for="answer" class="user-label">
+                                <i class="fa fa-key"></i>
+                            </label>
+                            <input id="answer" class="user-content" type="text" placeholder="答案">
+                        </div>
+                        <a href="javascript:void(0);" class="btn btn-submit" id="submit">登录</a>
+                        <div class="link-item">
+                            <span>已有账号? </span><a href="./user-login.html" class="link">去登录</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%= require('html-loader!./layout/footer-common.html')  %>
+</body>
+
+</html>

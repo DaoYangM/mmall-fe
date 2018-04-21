@@ -29,6 +29,10 @@ a {
     text-decoration: none;
 }
 
+a:hover {
+    color: #c60023;
+}
+
 /* 顶宽布局 */
 
 .w {
@@ -96,4 +100,23 @@ a {
     border-radius: 5px;
     background: url(../../image/icon/loading.gif) no-repeat;
     opacity: .6;
+}
+
+.panel {
+    padding: 10px;
+    margin-bottom: 10px;
+    background: #fff;
+}
+
+.panel .panel-title {
+    padding: 10px;
+    font-size: 14px;
+    color: #666;
+    font-weight: bold;
+    border-bottom: 1px solid #eee;
+}
+
+.panel .panel-body {
+    padding: 10px;
+    overflow: hidden;
 }

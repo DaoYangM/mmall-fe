@@ -9,7 +9,7 @@ var navSide = {
         navList: [
             {name: 'user-center', desc: '个人中心', href: './user-center.html'},
             {name: 'order-list', desc: '订单中心', href: './user-center.html'},
-            {name: 'pass-update', desc: '修改密码', href: './user-center.html'},
+            {name: 'pass-update', desc: '修改密码', href: './user-password-update.html'},
             {name: 'about', desc: '关于MMALL', href: './user-center.html'}
         ],
     },

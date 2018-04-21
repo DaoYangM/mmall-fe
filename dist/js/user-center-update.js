@@ -1,4 +1,4 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["index"],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["user-center-update"],{
 
 /***/ "./node_modules/hogan.js/lib/compiler.js":
 /*!***********************************************!*\
@@ -30,28 +30,6 @@ eval("/*\n *  Copyright 2011 Twitter, Inc.\n *  Licensed under the Apache Licens
 /***/ (function(module, exports, __webpack_require__) {
 
 eval("/*\n *  Copyright 2011 Twitter, Inc.\n *  Licensed under the Apache License, Version 2.0 (the \"License\");\n *  you may not use this file except in compliance with the License.\n *  You may obtain a copy of the License at\n *\n *  http://www.apache.org/licenses/LICENSE-2.0\n *\n *  Unless required by applicable law or agreed to in writing, software\n *  distributed under the License is distributed on an \"AS IS\" BASIS,\n *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n *  See the License for the specific language governing permissions and\n *  limitations under the License.\n */\n\nvar Hogan = {};\n\n(function (Hogan) {\n  Hogan.Template = function (codeObj, text, compiler, options) {\n    codeObj = codeObj || {};\n    this.r = codeObj.code || this.r;\n    this.c = compiler;\n    this.options = options || {};\n    this.text = text || '';\n    this.partials = codeObj.partials || {};\n    this.subs = codeObj.subs || {};\n    this.buf = '';\n  }\n\n  Hogan.Template.prototype = {\n    // render: replaced by generated code.\n    r: function (context, partials, indent) { return ''; },\n\n    // variable escaping\n    v: hoganEscape,\n\n    // triple stache\n    t: coerceToString,\n\n    render: function render(context, partials, indent) {\n      return this.ri([context], partials || {}, indent);\n    },\n\n    // render internal -- a hook for overrides that catches partials too\n    ri: function (context, partials, indent) {\n      return this.r(context, partials, indent);\n    },\n\n    // ensurePartial\n    ep: function(symbol, partials) {\n      var partial = this.partials[symbol];\n\n      // check to see that if we've instantiated this partial before\n      var template = partials[partial.name];\n      if (partial.instance && partial.base == template) {\n        return partial.instance;\n      }\n\n      if (typeof template == 'string') {\n        if (!this.c) {\n          throw new Error(\"No compiler available.\");\n        }\n        template = this.c.compile(template, this.options);\n      }\n\n      if (!template) {\n        return null;\n      }\n\n      // We use this to check whether the partials dictionary has changed\n      this.partials[symbol].base = template;\n\n      if (partial.subs) {\n        // Make sure we consider parent template now\n        if (!partials.stackText) partials.stackText = {};\n        for (key in partial.subs) {\n          if (!partials.stackText[key]) {\n            partials.stackText[key] = (this.activeSub !== undefined && partials.stackText[this.activeSub]) ? partials.stackText[this.activeSub] : this.text;\n          }\n        }\n        template = createSpecializedPartial(template, partial.subs, partial.partials,\n          this.stackSubs, this.stackPartials, partials.stackText);\n      }\n      this.partials[symbol].instance = template;\n\n      return template;\n    },\n\n    // tries to find a partial in the current scope and render it\n    rp: function(symbol, context, partials, indent) {\n      var partial = this.ep(symbol, partials);\n      if (!partial) {\n        return '';\n      }\n\n      return partial.ri(context, partials, indent);\n    },\n\n    // render a section\n    rs: function(context, partials, section) {\n      var tail = context[context.length - 1];\n\n      if (!isArray(tail)) {\n        section(context, partials, this);\n        return;\n      }\n\n      for (var i = 0; i < tail.length; i++) {\n        context.push(tail[i]);\n        section(context, partials, this);\n        context.pop();\n      }\n    },\n\n    // maybe start a section\n    s: function(val, ctx, partials, inverted, start, end, tags) {\n      var pass;\n\n      if (isArray(val) && val.length === 0) {\n        return false;\n      }\n\n      if (typeof val == 'function') {\n        val = this.ms(val, ctx, partials, inverted, start, end, tags);\n      }\n\n      pass = !!val;\n\n      if (!inverted && pass && ctx) {\n        ctx.push((typeof val == 'object') ? val : ctx[ctx.length - 1]);\n      }\n\n      return pass;\n    },\n\n    // find values with dotted names\n    d: function(key, ctx, partials, returnFound) {\n      var found,\n          names = key.split('.'),\n          val = this.f(names[0], ctx, partials, returnFound),\n          doModelGet = this.options.modelGet,\n          cx = null;\n\n      if (key === '.' && isArray(ctx[ctx.length - 2])) {\n        val = ctx[ctx.length - 1];\n      } else {\n        for (var i = 1; i < names.length; i++) {\n          found = findInScope(names[i], val, doModelGet);\n          if (found !== undefined) {\n            cx = val;\n            val = found;\n          } else {\n            val = '';\n          }\n        }\n      }\n\n      if (returnFound && !val) {\n        return false;\n      }\n\n      if (!returnFound && typeof val == 'function') {\n        ctx.push(cx);\n        val = this.mv(val, ctx, partials);\n        ctx.pop();\n      }\n\n      return val;\n    },\n\n    // find values with normal names\n    f: function(key, ctx, partials, returnFound) {\n      var val = false,\n          v = null,\n          found = false,\n          doModelGet = this.options.modelGet;\n\n      for (var i = ctx.length - 1; i >= 0; i--) {\n        v = ctx[i];\n        val = findInScope(key, v, doModelGet);\n        if (val !== undefined) {\n          found = true;\n          break;\n        }\n      }\n\n      if (!found) {\n        return (returnFound) ? false : \"\";\n      }\n\n      if (!returnFound && typeof val == 'function') {\n        val = this.mv(val, ctx, partials);\n      }\n\n      return val;\n    },\n\n    // higher order templates\n    ls: function(func, cx, partials, text, tags) {\n      var oldTags = this.options.delimiters;\n\n      this.options.delimiters = tags;\n      this.b(this.ct(coerceToString(func.call(cx, text)), cx, partials));\n      this.options.delimiters = oldTags;\n\n      return false;\n    },\n\n    // compile text\n    ct: function(text, cx, partials) {\n      if (this.options.disableLambda) {\n        throw new Error('Lambda features disabled.');\n      }\n      return this.c.compile(text, this.options).render(cx, partials);\n    },\n\n    // template result buffering\n    b: function(s) { this.buf += s; },\n\n    fl: function() { var r = this.buf; this.buf = ''; return r; },\n\n    // method replace section\n    ms: function(func, ctx, partials, inverted, start, end, tags) {\n      var textSource,\n          cx = ctx[ctx.length - 1],\n          result = func.call(cx);\n\n      if (typeof result == 'function') {\n        if (inverted) {\n          return true;\n        } else {\n          textSource = (this.activeSub && this.subsText && this.subsText[this.activeSub]) ? this.subsText[this.activeSub] : this.text;\n          return this.ls(result, cx, partials, textSource.substring(start, end), tags);\n        }\n      }\n\n      return result;\n    },\n\n    // method replace variable\n    mv: function(func, ctx, partials) {\n      var cx = ctx[ctx.length - 1];\n      var result = func.call(cx);\n\n      if (typeof result == 'function') {\n        return this.ct(coerceToString(result.call(cx)), cx, partials);\n      }\n\n      return result;\n    },\n\n    sub: function(name, context, partials, indent) {\n      var f = this.subs[name];\n      if (f) {\n        this.activeSub = name;\n        f(context, partials, this, indent);\n        this.activeSub = false;\n      }\n    }\n\n  };\n\n  //Find a key in an object\n  function findInScope(key, scope, doModelGet) {\n    var val;\n\n    if (scope && typeof scope == 'object') {\n\n      if (scope[key] !== undefined) {\n        val = scope[key];\n\n      // try lookup with get for backbone or similar model data\n      } else if (doModelGet && scope.get && typeof scope.get == 'function') {\n        val = scope.get(key);\n      }\n    }\n\n    return val;\n  }\n\n  function createSpecializedPartial(instance, subs, partials, stackSubs, stackPartials, stackText) {\n    function PartialTemplate() {};\n    PartialTemplate.prototype = instance;\n    function Substitutions() {};\n    Substitutions.prototype = instance.subs;\n    var key;\n    var partial = new PartialTemplate();\n    partial.subs = new Substitutions();\n    partial.subsText = {};  //hehe. substext.\n    partial.buf = '';\n\n    stackSubs = stackSubs || {};\n    partial.stackSubs = stackSubs;\n    partial.subsText = stackText;\n    for (key in subs) {\n      if (!stackSubs[key]) stackSubs[key] = subs[key];\n    }\n    for (key in stackSubs) {\n      partial.subs[key] = stackSubs[key];\n    }\n\n    stackPartials = stackPartials || {};\n    partial.stackPartials = stackPartials;\n    for (key in partials) {\n      if (!stackPartials[key]) stackPartials[key] = partials[key];\n    }\n    for (key in stackPartials) {\n      partial.partials[key] = stackPartials[key];\n    }\n\n    return partial;\n  }\n\n  var rAmp = /&/g,\n      rLt = /</g,\n      rGt = />/g,\n      rApos = /\\'/g,\n      rQuot = /\\\"/g,\n      hChars = /[&<>\\\"\\']/;\n\n  function coerceToString(val) {\n    return String((val === null || val === undefined) ? '' : val);\n  }\n\n  function hoganEscape(str) {\n    str = coerceToString(str);\n    return hChars.test(str) ?\n      str\n        .replace(rAmp, '&amp;')\n        .replace(rLt, '&lt;')\n        .replace(rGt, '&gt;')\n        .replace(rApos, '&#39;')\n        .replace(rQuot, '&quot;') :\n      str;\n  }\n\n  var isArray = Array.isArray || function(a) {\n    return Object.prototype.toString.call(a) === '[object Array]';\n  };\n\n})( true ? exports : undefined);\n\n\n//# sourceURL=webpack:///./node_modules/hogan.js/lib/template.js?");
-
-/***/ }),
-
-/***/ "./src/page/common/header/index.css":
-/*!******************************************!*\
-  !*** ./src/page/common/header/index.css ***!
-  \******************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("// removed by extract-text-webpack-plugin\n\n//# sourceURL=webpack:///./src/page/common/header/index.css?");
-
-/***/ }),
-
-/***/ "./src/page/common/header/index.js":
-/*!*****************************************!*\
-  !*** ./src/page/common/header/index.js ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("__webpack_require__(/*! ./index.css */ \"./src/page/common/header/index.css\")\r\n\r\nvar _mm = __webpack_require__(/*! util/mm.js */ \"./src/util/mm.js\")\r\n\r\nvar header = {\r\n    init: function() {\r\n        this.bindEvent();\r\n    },\r\n\r\n    onLoad: function() {\r\n        var keyword = _mm.gerUrlParam('keywork');\r\n        if(keyword) {\r\n            $('#search-input').val(keyword);\r\n        }\r\n    },\r\n\r\n    bindEvent: function() {\r\n        var _this = this;\r\n        $('#search-btn').click(function() {\r\n            _this.searchSubmit();\r\n        })\r\n\r\n        $('#search-input').keyup(function(e) {\r\n            if(e.keyCode === 13) {\r\n                _this.searchSubmit();\r\n            }\r\n        });\r\n    },\r\n\r\n    searchSubmit: function() {\r\n        var keyword = $.trim($('#search-input').val());\r\n        \r\n        if(keyword) {\r\n            window.location.href = './list.html?keywork=' + keyword;\r\n        } else {\r\n            _mm.goHome();\r\n        }\r\n    }\r\n}\r\n\r\nheader.init();\n\n//# sourceURL=webpack:///./src/page/common/header/index.js?");
 
 /***/ }),
 
@@ -88,36 +66,69 @@ eval("module.exports = \"{{#navList}}\\r\\n\\r\\n{{#isActive}}\\r\\n<li class=\\
 
 /***/ }),
 
-/***/ "./src/page/common/nav/index.css":
-/*!***************************************!*\
-  !*** ./src/page/common/nav/index.css ***!
-  \***************************************/
+/***/ "./src/page/common/nav-simple/index.css":
+/*!**********************************************!*\
+  !*** ./src/page/common/nav-simple/index.css ***!
+  \**********************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("// removed by extract-text-webpack-plugin\n\n//# sourceURL=webpack:///./src/page/common/nav/index.css?");
+eval("// removed by extract-text-webpack-plugin\n\n//# sourceURL=webpack:///./src/page/common/nav-simple/index.css?");
 
 /***/ }),
 
-/***/ "./src/page/common/nav/index.js":
-/*!**************************************!*\
-  !*** ./src/page/common/nav/index.js ***!
-  \**************************************/
+/***/ "./src/page/common/nav-simple/index.js":
+/*!*********************************************!*\
+  !*** ./src/page/common/nav-simple/index.js ***!
+  \*********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("__webpack_require__(/*! ./index.css */ \"./src/page/common/nav/index.css\")\n\n//# sourceURL=webpack:///./src/page/common/nav/index.js?");
+eval("__webpack_require__(/*! ./index.css */ \"./src/page/common/nav-simple/index.css\")\n\n//# sourceURL=webpack:///./src/page/common/nav-simple/index.js?");
 
 /***/ }),
 
-/***/ "./src/page/index/index.js":
-/*!*********************************!*\
-  !*** ./src/page/index/index.js ***!
-  \*********************************/
+/***/ "./src/page/user-center-update/index.css":
+/*!***********************************************!*\
+  !*** ./src/page/user-center-update/index.css ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("// removed by extract-text-webpack-plugin\n\n//# sourceURL=webpack:///./src/page/user-center-update/index.css?");
+
+/***/ }),
+
+/***/ "./src/page/user-center-update/index.js":
+/*!**********************************************!*\
+  !*** ./src/page/user-center-update/index.js ***!
+  \**********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("__webpack_require__(/*! page/common/header/index.js */ \"./src/page/common/header/index.js\")\r\n__webpack_require__(/*! page/common/nav/index.js */ \"./src/page/common/nav/index.js\")\r\nvar _mm = __webpack_require__(/*! util/mm.js */ \"./src/util/mm.js\");\r\nvar navSide = __webpack_require__(/*! page/common/nav-side/index.js */ \"./src/page/common/nav-side/index.js\")\r\nnavSide.init({\r\n    name: 'order-list'\r\n})\r\n\r\n\r\n// console.log(_mm.getUrlParam('name'));\r\n\r\n// var html = '<div>{{ data }}</div>'\r\n// var data = {\r\n//     data: 123\r\n// }\r\n\r\n// console.log(_mm.renderHtml(html, data));\r\n\r\n// console.log(\"email: \" + _mm.validate(value=\"498721777@qq.com\", type=\"email\"))\n\n//# sourceURL=webpack:///./src/page/index/index.js?");
+eval("__webpack_require__(/*! ./index.css */ \"./src/page/user-center-update/index.css\");\r\n__webpack_require__(/*! page/common/nav-simple/index.js */ \"./src/page/common/nav-simple/index.js\");\r\n\r\nvar _user = __webpack_require__(/*! service/user-service.js */ \"./src/service/user-service.js\");\r\nvar navSide = __webpack_require__(/*! page/common/nav-side/index.js */ \"./src/page/common/nav-side/index.js\");\r\nvar templateIndex = __webpack_require__(/*! ./index.string */ \"./src/page/user-center-update/index.string\");\r\nvar _mm = __webpack_require__(/*! util/mm.js */ \"./src/util/mm.js\");\r\n\r\nvar formError = {\r\n\r\n    _target: \"\",\r\n\r\n    show: function (msg, target) {\r\n        this._target = target;\r\n        $('.error-item').show().find('.err-msg').text(msg);\r\n        $('#'+target).css(\"border\", \"1px solid red\");\r\n    },\r\n\r\n    hide: function (msg) {\r\n        $('.error-item').hide().find('.err-msg').text('');\r\n        $('#'+ this._target).css(\"border\", \"1px solid #bdbdbd\");\r\n    }\r\n};\r\n\r\nvar page = {\r\n    init: function () {\r\n        this.onLoad();\r\n    },\r\n    onLoad: function() {\r\n        navSide.init({\r\n            name: 'user-center'\r\n        });\r\n\r\n        this.loadUserInfo();\r\n\r\n        this.bindEvent();\r\n    },\r\n\r\n    bindEvent: function() {\r\n        var _this = this;\r\n        $(document).on('click', '.btn-submit', function() {\r\n            var formData = {\r\n                phone: $.trim($('#phone').val()),\r\n                email: $.trim($('#email').val()),\r\n                question: $.trim($('#question').val()),\r\n                answer: $.trim($('#answer').val()),\r\n                username: '',\r\n                password: ''\r\n            },\r\n\r\n            validateResult = _this.formValidate(formData);\r\n\r\n            if(validateResult.status) {\r\n                _user.updateUserInfo(formData, function(target, desc) {\r\n                    console.log(target);\r\n                    formError.hide();\r\n                    window.location.href = './user-center.html';\r\n                }, function(err) {\r\n                    formError.show(\"用户信息更新失败\");\r\n                });\r\n            } else {\r\n                formError.show(validateResult.msg);\r\n            }\r\n        },\r\n    )},\r\n\r\n    formValidate: function (formData) {\r\n        console.log(formData);\r\n        var result = {\r\n            status: false,\r\n            msg: ''\r\n        };\r\n\r\n        if (!_mm.validate(formData.phone, 'require')) {\r\n            result.msg = '手机号名不能为空';\r\n            return result;\r\n        }\r\n\r\n        if (!_mm.validate(formData.email, 'require')) {\r\n            result.msg = '邮箱名不能为空';\r\n            return result;\r\n        }\r\n\r\n        if (!_mm.validate(formData.question, 'require')) {\r\n            result.msg = '问题名不能为空';\r\n            return result;\r\n        }\r\n        if (!_mm.validate(formData.answer, 'require')) {\r\n            result.msg = '答案名不能为空';\r\n            return result;\r\n        }\r\n        result.status = true;\r\n        result.msg = \"验证通过\";\r\n\r\n        return result;\r\n    },\r\n    loadUserInfo: function() {\r\n\r\n        var userHtml = \"\";\r\n\r\n        _user.getUserInfo(function(target, msg) {\r\n            userHtml = _mm.renderHtml(templateIndex,  target.target);\r\n            $('.panel-body').html(userHtml);\r\n        }, function(error) {\r\n\r\n        });\r\n    }\r\n}\r\n\r\n$(function () {\r\n    page.init();\r\n})\n\n//# sourceURL=webpack:///./src/page/user-center-update/index.js?");
+
+/***/ }),
+
+/***/ "./src/page/user-center-update/index.string":
+/*!**************************************************!*\
+  !*** ./src/page/user-center-update/index.string ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = \"<div class=\\\"user-info\\\">\\r\\n    <div class=\\\"form-line\\\">\\r\\n        <span class=\\\"label\\\">用户名: </span>\\r\\n        <span class=\\\"text\\\">{{ username }}</span>\\r\\n    </div>\\r\\n    <div class=\\\"form-line\\\">\\r\\n        <span class=\\\"label\\\">电 话: </span>\\r\\n        <input id=\\\"phone\\\" type=\\\"text\\\" class=\\\"input\\\" autocomplete=\\\"off\\\" value=\\\"{{ phone }}\\\">\\r\\n    </div>\\r\\n    <div class=\\\"form-line\\\">\\r\\n        <span class=\\\"label\\\">邮 箱: </span>\\r\\n        <input id=\\\"email\\\" type=\\\"text\\\" class=\\\"input\\\" autocomplete=\\\"off\\\" value=\\\"{{ email }}\\\">\\r\\n    </div>\\r\\n    <div class=\\\"form-line\\\">\\r\\n        <span class=\\\"label\\\">问 题: </span>\\r\\n        <input id=\\\"question\\\" type=\\\"text\\\" class=\\\"input\\\" autocomplete=\\\"off\\\" value=\\\"{{ question }}\\\">\\r\\n    </div>\\r\\n    <div class=\\\"form-line\\\">\\r\\n        <span class=\\\"label\\\">答 案: </span>\\r\\n        <input id=\\\"answer\\\" type=\\\"text\\\" class=\\\"input\\\" autocomplete=\\\"off\\\" value=\\\"{{ answer }}\\\">\\r\\n    </div>\\r\\n\\r\\n    <a href=\\\"javascript:void(0);\\\" class=\\\"btn btn-submit\\\">保存</a>\\r\\n\\r\\n</div>\";\n\n//# sourceURL=webpack:///./src/page/user-center-update/index.string?");
+
+/***/ }),
+
+/***/ "./src/service/user-service.js":
+/*!*************************************!*\
+  !*** ./src/service/user-service.js ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("var _mm = __webpack_require__(/*! util/mm.js */ \"./src/util/mm.js\");\r\n\r\nvar _user = {\r\n    login: function (userInfo, resolve, reject) {\r\n        _mm.request({\r\n            method: 'post',\r\n            data: userInfo,\r\n            url: _mm.getServerUrl('/users/login'),\r\n            // dataType: 'json',\r\n            success: resolve,\r\n            error: reject\r\n        });\r\n    },\r\n\r\n    register: function (userInfo, resolve, reject) {\r\n        _mm.request({\r\n            method: 'post',\r\n            data: userInfo,\r\n            url: _mm.getServerUrl('/users/register'),\r\n            // dataType: 'json',\r\n            success: resolve,\r\n            error: reject\r\n        });\r\n    },\r\n\r\n    checkUsername: function (username, resolve, reject) {\r\n        _mm.request({\r\n            method: 'post',\r\n            data: {\r\n                'username' : username\r\n            },\r\n            url: _mm.getServerUrl('/users/check/username'),\r\n            // dataType: 'json',\r\n            success: resolve,\r\n            error: reject\r\n        });\r\n    },\r\n\r\n    getUserInfo: function(resolve, reject) {\r\n        _mm.request({\r\n            method: 'get',\r\n            url: _mm.getServerUrl('/users/me'),\r\n            success: resolve,\r\n            error: reject\r\n        });\r\n    },\r\n\r\n    updateUserInfo: function (userInfo, resolve, reject) {\r\n        _mm.request({\r\n            method: 'put',\r\n            data: userInfo,\r\n            url: _mm.getServerUrl('/users/update/detail'),\r\n            success: resolve,\r\n            error: reject\r\n        });\r\n    },\r\n}\r\n\r\nmodule.exports = _user;\n\n//# sourceURL=webpack:///./src/service/user-service.js?");
 
 /***/ }),
 
@@ -132,15 +143,15 @@ eval("var Hogan = __webpack_require__(/*! hogan.js */ \"./node_modules/hogan.js/
 
 /***/ }),
 
-/***/ 1:
-/*!***************************************!*\
-  !*** multi ./src/page/index/index.js ***!
-  \***************************************/
+/***/ 6:
+/*!****************************************************!*\
+  !*** multi ./src/page/user-center-update/index.js ***!
+  \****************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("module.exports = __webpack_require__(/*! ./src/page/index/index.js */\"./src/page/index/index.js\");\n\n\n//# sourceURL=webpack:///multi_./src/page/index/index.js?");
+eval("module.exports = __webpack_require__(/*! ./src/page/user-center-update/index.js */\"./src/page/user-center-update/index.js\");\n\n\n//# sourceURL=webpack:///multi_./src/page/user-center-update/index.js?");
 
 /***/ })
 
-},[[1,"common"]]]);
+},[[6,"common"]]]);

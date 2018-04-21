@@ -5,19 +5,7 @@ var navSide = require('page/common/nav-side/index.js')
 navSide.init({
     name: 'order-list'
 })
-// var $ = require('jquery');
-// _mm.request({
-//     type: 'get',
-//     url: '/products?keyword=1',
-//     dataType: 'json',
-//     error: function (msg) {
-//         console.log(msg);
-//     },
-//     success: function (data, msg) {
-//         console.log("success");
-//         console.log(data);
-//     }
-// });
+
 
 // console.log(_mm.getUrlParam('name'));
 

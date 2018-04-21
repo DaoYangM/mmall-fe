@@ -1,4 +1,4 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["index"],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["user-register"],{
 
 /***/ "./node_modules/hogan.js/lib/compiler.js":
 /*!***********************************************!*\
@@ -33,91 +33,58 @@ eval("/*\n *  Copyright 2011 Twitter, Inc.\n *  Licensed under the Apache Licens
 
 /***/ }),
 
-/***/ "./src/page/common/header/index.css":
+/***/ "./src/page/common/nav-simple/index.css":
+/*!**********************************************!*\
+  !*** ./src/page/common/nav-simple/index.css ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("// removed by extract-text-webpack-plugin\n\n//# sourceURL=webpack:///./src/page/common/nav-simple/index.css?");
+
+/***/ }),
+
+/***/ "./src/page/common/nav-simple/index.js":
+/*!*********************************************!*\
+  !*** ./src/page/common/nav-simple/index.js ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("__webpack_require__(/*! ./index.css */ \"./src/page/common/nav-simple/index.css\")\n\n//# sourceURL=webpack:///./src/page/common/nav-simple/index.js?");
+
+/***/ }),
+
+/***/ "./src/page/user-register/index.css":
 /*!******************************************!*\
-  !*** ./src/page/common/header/index.css ***!
+  !*** ./src/page/user-register/index.css ***!
   \******************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("// removed by extract-text-webpack-plugin\n\n//# sourceURL=webpack:///./src/page/common/header/index.css?");
+eval("// removed by extract-text-webpack-plugin\n\n//# sourceURL=webpack:///./src/page/user-register/index.css?");
 
 /***/ }),
 
-/***/ "./src/page/common/header/index.js":
+/***/ "./src/page/user-register/index.js":
 /*!*****************************************!*\
-  !*** ./src/page/common/header/index.js ***!
+  !*** ./src/page/user-register/index.js ***!
   \*****************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("__webpack_require__(/*! ./index.css */ \"./src/page/common/header/index.css\")\r\n\r\nvar _mm = __webpack_require__(/*! util/mm.js */ \"./src/util/mm.js\")\r\n\r\nvar header = {\r\n    init: function() {\r\n        this.bindEvent();\r\n    },\r\n\r\n    onLoad: function() {\r\n        var keyword = _mm.gerUrlParam('keywork');\r\n        if(keyword) {\r\n            $('#search-input').val(keyword);\r\n        }\r\n    },\r\n\r\n    bindEvent: function() {\r\n        var _this = this;\r\n        $('#search-btn').click(function() {\r\n            _this.searchSubmit();\r\n        })\r\n\r\n        $('#search-input').keyup(function(e) {\r\n            if(e.keyCode === 13) {\r\n                _this.searchSubmit();\r\n            }\r\n        });\r\n    },\r\n\r\n    searchSubmit: function() {\r\n        var keyword = $.trim($('#search-input').val());\r\n        \r\n        if(keyword) {\r\n            window.location.href = './list.html?keywork=' + keyword;\r\n        } else {\r\n            _mm.goHome();\r\n        }\r\n    }\r\n}\r\n\r\nheader.init();\n\n//# sourceURL=webpack:///./src/page/common/header/index.js?");
+eval("__webpack_require__(/*! ./index.css */ \"./src/page/user-register/index.css\")\r\n__webpack_require__(/*! page/common/nav-simple/index.js */ \"./src/page/common/nav-simple/index.js\")\r\n\r\nvar _user = __webpack_require__(/*! service/user-service.js */ \"./src/service/user-service.js\")\r\nvar _mm = __webpack_require__(/*! util/mm.js */ \"./src/util/mm.js\");\r\n\r\nvar formError = {\r\n\r\n    _target: \"\",\r\n\r\n    show: function (msg, target) {\r\n        this._target = target;\r\n        $('.error-item').show().find('.err-msg').text(msg);\r\n        $('#'+target).css(\"border\", \"1px solid red\");\r\n    },\r\n\r\n    hide: function (msg) {\r\n        $('.error-item').hide().find('.err-msg').text('');\r\n        $('#'+ this._target).css(\"border\", \"1px solid #bdbdbd\");\r\n    }\r\n};\r\n\r\nvar username = $('#username');\r\nvar _password = $('#password');\r\n\r\nvar page = {\r\n    init: function () {\r\n        this.bindEvent();\r\n    },\r\n\r\n    bindEvent: function () {\r\n        var _this = this;\r\n        $('#submit').click(function () {\r\n            _this.submit();\r\n        });\r\n\r\n        $('user-con').keyup(function (e) {\r\n            // 表示回车\r\n            if (e.keyCode === 13) {\r\n                _this.submit();\r\n            }\r\n        });\r\n\r\n        $('#username').blur(function() {\r\n            var username = $.trim($(this).val());\r\n\r\n            _user.checkUsername(username, function(result) {\r\n                formError.hide();\r\n            }, function(error) {\r\n                formError.show(error, 'username');\r\n            });\r\n        })\r\n    },\r\n\r\n    // 提交表单\r\n    submit: function () {\r\n        var formData = {\r\n            username: $.trim(username.val()),\r\n            password: $.trim($('#password').val()),\r\n            phone: $.trim($('#phone').val()),\r\n            passwordConfirm: $.trim($('#password-confirm').val()),\r\n            email: $.trim($('#email').val()),\r\n            question: $.trim($('#question').val()),\r\n            answer: $.trim($('#answer').val()),\r\n        },\r\n\r\n        validateResult = this.formValidate(formData);\r\n\r\n        if(validateResult.status) {\r\n            console.log(formData);\r\n            _user.register(formData, function(target, desc) {\r\n                console.log(target);\r\n                formError.hide();\r\n                window.location.href = './result.html?type=register';\r\n            }, function(err) {\r\n                formError.show(\"用户名或密码错误\");\r\n            });\r\n        } else {\r\n            formError.show(validateResult.msg);\r\n        }\r\n    },\r\n\r\n    formValidate: function (formData) {\r\n\r\n        console.log(formData);\r\n        var result = {\r\n            status: false,\r\n            msg: ''\r\n        };\r\n\r\n        if (!_mm.validate(formData.username, 'require')) {\r\n            result.msg = '用户名不能为空';\r\n            username.css(\"border\", \"1px solid red\");\r\n            return result;\r\n        }\r\n\r\n        if (!_mm.validate(formData.password, 'require')) {\r\n            result.msg = '密码名不能为空';\r\n            _password.css(\"border\", \"1px solid red\");\r\n            return result;\r\n        }\r\n        if (!_mm.validate(formData.passwordConfirm, 'require')) {\r\n            result.msg = '确认密码名不能为空';\r\n            return result;\r\n        }\r\n\r\n        if (formData.password != formData.passwordConfirm) {\r\n            result.msg = \"两次密码不同\";\r\n            return result;\r\n        }\r\n\r\n        if (!_mm.validate(formData.phone, 'require')) {\r\n            result.msg = '手机号名不能为空';\r\n            return result;\r\n        }\r\n\r\n        if (!_mm.validate(formData.email, 'require')) {\r\n            result.msg = '邮箱名不能为空';\r\n            return result;\r\n        }\r\n\r\n        if (!_mm.validate(formData.question, 'require')) {\r\n            result.msg = '问题名不能为空';\r\n            return result;\r\n        }\r\n        if (!_mm.validate(formData.answer, 'require')) {\r\n            result.msg = '答案名不能为空';\r\n            return result;\r\n        }\r\n        result.status = true;\r\n        result.msg = \"验证通过\";\r\n\r\n        return result;\r\n    }\r\n};\r\n\r\n$(function () {\r\n    page.init();\r\n})\n\n//# sourceURL=webpack:///./src/page/user-register/index.js?");
 
 /***/ }),
 
-/***/ "./src/page/common/nav-side/index.css":
-/*!********************************************!*\
-  !*** ./src/page/common/nav-side/index.css ***!
-  \********************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("// removed by extract-text-webpack-plugin\n\n//# sourceURL=webpack:///./src/page/common/nav-side/index.css?");
-
-/***/ }),
-
-/***/ "./src/page/common/nav-side/index.js":
-/*!*******************************************!*\
-  !*** ./src/page/common/nav-side/index.js ***!
-  \*******************************************/
+/***/ "./src/service/user-service.js":
+/*!*************************************!*\
+  !*** ./src/service/user-service.js ***!
+  \*************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("__webpack_require__(/*! ./index.css */ \"./src/page/common/nav-side/index.css\")\r\n\r\nvar _mm = __webpack_require__(/*! util/mm.js */ \"./src/util/mm.js\")\r\nvar templateIndex = __webpack_require__(/*! ./index.string */ \"./src/page/common/nav-side/index.string\");\r\n\r\nvar navSide = {\r\n    option: {\r\n        name: '',\r\n        navList: [\r\n            {name: 'user-center', desc: '个人中心', href: './user-center.html'},\r\n            {name: 'order-list', desc: '订单中心', href: './user-center.html'},\r\n            {name: 'pass-update', desc: '修改密码', href: './user-center.html'},\r\n            {name: 'about', desc: '关于MMALL', href: './user-center.html'}\r\n        ],\r\n    },\r\n\r\n    init: function(option) {\r\n        $.extend(this.option, option)\r\n        this.renderNav();\r\n    },\r\n\r\n    renderNav: function() {\r\n        for (let i = 0, iLength = this.option.navList.length; i < iLength; i++) {\r\n            if(this.option.navList[i].name === this.option.name) {\r\n                this.option.navList[i].isActive = true;\r\n            }\r\n        };\r\n\r\n        var navHtml = _mm.renderHtml(templateIndex, {\r\n            navList: this.option.navList\r\n        });\r\n\r\n        console.log(this.option);\r\n\r\n        $('.nav-side').html(navHtml);\r\n    }\r\n};\r\n\r\nmodule.exports = navSide;\n\n//# sourceURL=webpack:///./src/page/common/nav-side/index.js?");
-
-/***/ }),
-
-/***/ "./src/page/common/nav-side/index.string":
-/*!***********************************************!*\
-  !*** ./src/page/common/nav-side/index.string ***!
-  \***********************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("module.exports = \"{{#navList}}\\r\\n\\r\\n{{#isActive}}\\r\\n<li class=\\\"nav-item active\\\">\\r\\n{{/isActive}}\\r\\n\\r\\n{{^isActive}}\\r\\n<li class=\\\"nav-item\\\">\\r\\n{{/isActive}}\\r\\n\\r\\n<a href=\\\"{{href}}\\\" class=\\\"link\\\">{{ desc }}</a> \\r\\n</li>\\r\\n\\r\\n{{/navList}}\";\n\n//# sourceURL=webpack:///./src/page/common/nav-side/index.string?");
-
-/***/ }),
-
-/***/ "./src/page/common/nav/index.css":
-/*!***************************************!*\
-  !*** ./src/page/common/nav/index.css ***!
-  \***************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("// removed by extract-text-webpack-plugin\n\n//# sourceURL=webpack:///./src/page/common/nav/index.css?");
-
-/***/ }),
-
-/***/ "./src/page/common/nav/index.js":
-/*!**************************************!*\
-  !*** ./src/page/common/nav/index.js ***!
-  \**************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("__webpack_require__(/*! ./index.css */ \"./src/page/common/nav/index.css\")\n\n//# sourceURL=webpack:///./src/page/common/nav/index.js?");
-
-/***/ }),
-
-/***/ "./src/page/index/index.js":
-/*!*********************************!*\
-  !*** ./src/page/index/index.js ***!
-  \*********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("__webpack_require__(/*! page/common/header/index.js */ \"./src/page/common/header/index.js\")\r\n__webpack_require__(/*! page/common/nav/index.js */ \"./src/page/common/nav/index.js\")\r\nvar _mm = __webpack_require__(/*! util/mm.js */ \"./src/util/mm.js\");\r\nvar navSide = __webpack_require__(/*! page/common/nav-side/index.js */ \"./src/page/common/nav-side/index.js\")\r\nnavSide.init({\r\n    name: 'order-list'\r\n})\r\n\r\n\r\n// console.log(_mm.getUrlParam('name'));\r\n\r\n// var html = '<div>{{ data }}</div>'\r\n// var data = {\r\n//     data: 123\r\n// }\r\n\r\n// console.log(_mm.renderHtml(html, data));\r\n\r\n// console.log(\"email: \" + _mm.validate(value=\"498721777@qq.com\", type=\"email\"))\n\n//# sourceURL=webpack:///./src/page/index/index.js?");
+eval("var _mm = __webpack_require__(/*! util/mm.js */ \"./src/util/mm.js\");\r\n\r\nvar _user = {\r\n    login: function (userInfo, resolve, reject) {\r\n        _mm.request({\r\n            method: 'post',\r\n            data: userInfo,\r\n            url: _mm.getServerUrl('/users/login'),\r\n            // dataType: 'json',\r\n            success: resolve,\r\n            error: reject\r\n        });\r\n    },\r\n\r\n    register: function (userInfo, resolve, reject) {\r\n        _mm.request({\r\n            method: 'post',\r\n            data: userInfo,\r\n            url: _mm.getServerUrl('/users/register'),\r\n            // dataType: 'json',\r\n            success: resolve,\r\n            error: reject\r\n        });\r\n    },\r\n\r\n    checkUsername: function (username, resolve, reject) {\r\n        _mm.request({\r\n            method: 'post',\r\n            data: {\r\n                'username' : username\r\n            },\r\n            url: _mm.getServerUrl('/users/check/username'),\r\n            // dataType: 'json',\r\n            success: resolve,\r\n            error: reject\r\n        });\r\n    },\r\n\r\n    getUserInfo: function(resolve, reject) {\r\n        _mm.request({\r\n            method: 'get',\r\n            url: _mm.getServerUrl('/users/me'),\r\n            success: resolve,\r\n            error: reject\r\n        });\r\n    },\r\n\r\n    updateUserInfo: function (userInfo, resolve, reject) {\r\n        _mm.request({\r\n            method: 'put',\r\n            data: userInfo,\r\n            url: _mm.getServerUrl('/users/update/detail'),\r\n            success: resolve,\r\n            error: reject\r\n        });\r\n    },\r\n}\r\n\r\nmodule.exports = _user;\n\n//# sourceURL=webpack:///./src/service/user-service.js?");
 
 /***/ }),
 
@@ -132,15 +99,15 @@ eval("var Hogan = __webpack_require__(/*! hogan.js */ \"./node_modules/hogan.js/
 
 /***/ }),
 
-/***/ 1:
-/*!***************************************!*\
-  !*** multi ./src/page/index/index.js ***!
-  \***************************************/
+/***/ 4:
+/*!***********************************************!*\
+  !*** multi ./src/page/user-register/index.js ***!
+  \***********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("module.exports = __webpack_require__(/*! ./src/page/index/index.js */\"./src/page/index/index.js\");\n\n\n//# sourceURL=webpack:///multi_./src/page/index/index.js?");
+eval("module.exports = __webpack_require__(/*! ./src/page/user-register/index.js */\"./src/page/user-register/index.js\");\n\n\n//# sourceURL=webpack:///multi_./src/page/user-register/index.js?");
 
 /***/ })
 
-},[[1,"common"]]]);
+},[[4,"common"]]]);

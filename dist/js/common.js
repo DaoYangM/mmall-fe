@@ -512,7 +512,7 @@ eval("__webpack_require__(/*! ./index.css */ \"./src/page/common/header/index.cs
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("__webpack_require__(/*! ./layout.css */ \"./src/page/common/layout.css\");\r\n__webpack_require__(/*! ./footer/index.js */ \"./src/page/common/footer/index.js\");\r\n__webpack_require__(/*! ./header/index.js */ \"./src/page/common/header/index.js\");\r\n__webpack_require__(/*! ./nav-side/index.js */ \"./src/page/common/nav-side/index.js\");\r\n__webpack_require__(/*! node_modules/font-awesome/css/font-awesome.min.css */ \"./node_modules/font-awesome/css/font-awesome.min.css\");\n\n//# sourceURL=webpack:///./src/page/common/index.js?");
+eval("__webpack_require__(/*! ./layout.css */ \"./src/page/common/layout.css\");\r\n__webpack_require__(/*! ./footer/index.js */ \"./src/page/common/footer/index.js\");\r\n__webpack_require__(/*! ./header/index.js */ \"./src/page/common/header/index.js\");\r\n__webpack_require__(/*! ./nav-side/index.js */ \"./src/page/common/nav-side/index.js\");\r\n__webpack_require__(/*! ./nav/index.js */ \"./src/page/common/nav/index.js\");\r\n__webpack_require__(/*! node_modules/font-awesome/css/font-awesome.min.css */ \"./node_modules/font-awesome/css/font-awesome.min.css\");\n\n//# sourceURL=webpack:///./src/page/common/index.js?");
 
 /***/ }),
 
@@ -560,6 +560,28 @@ eval("module.exports = \"{{#navList}}\\r\\n\\r\\n{{#isActive}}\\r\\n<li class=\\
 
 /***/ }),
 
+/***/ "./src/page/common/nav/index.css":
+/*!***************************************!*\
+  !*** ./src/page/common/nav/index.css ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("// removed by extract-text-webpack-plugin\n\n//# sourceURL=webpack:///./src/page/common/nav/index.css?");
+
+/***/ }),
+
+/***/ "./src/page/common/nav/index.js":
+/*!**************************************!*\
+  !*** ./src/page/common/nav/index.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("__webpack_require__(/*! ./index.css */ \"./src/page/common/nav/index.css\")\n\n//# sourceURL=webpack:///./src/page/common/nav/index.js?");
+
+/***/ }),
+
 /***/ "./src/util/mm.js":
 /*!************************!*\
   !*** ./src/util/mm.js ***!
@@ -567,7 +589,7 @@ eval("module.exports = \"{{#navList}}\\r\\n\\r\\n{{#isActive}}\\r\\n<li class=\\
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("var Hogan = __webpack_require__(/*! hogan.js */ \"./node_modules/hogan.js/lib/hogan.js\")\r\nvar conf = {\r\n    serverHost: ''\r\n}\r\n\r\nvar _mm = {\r\n    request: function (param) {\r\n        var _this = this;\r\n        $.ajax({\r\n            type: param.method || 'get',\r\n            url: param.url || '',\r\n            // dataType: param.type || 'json',\r\n            data: param.data || '',\r\n            success: function (result) {\r\n                if (0 === result.code) {\r\n                    typeof param.success === 'function' && param.success(result.target, result.desc);\r\n\r\n                } else if (10 === result.code) {\r\n                    _this.doLogin();\r\n\r\n                } else if (1 === result.code) {\r\n                    typeof param.error === 'function' && param.error(result.desc);\r\n                }\r\n            },\r\n\r\n            error: function (error) {\r\n                typeof param.error === 'function' && param.error(error.statusText);\r\n            }\r\n        });\r\n    },\r\n\r\n    doLogin: function () {\r\n        window.location.href = './login.html?redirect=' + encodeURIComponent(window.location.href);\r\n    },\r\n\r\n    goHome: function() {\r\n        window.location.href = './index.html'\r\n    },\r\n\r\n    getServerUrl: function (path) {\r\n        return conf.serverHost + path;\r\n    },\r\n\r\n    getUrlParam: function (name) {\r\n        //happymmall.com/products?keywork=xxx&page=1\r\n        var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');\r\n        var result = window.location.search.substr(1).match(reg);\r\n\r\n        return result ? decodeURIComponent(result[2]) : null;\r\n    },\r\n\r\n    renderHtml: function(htmlTemplate, data) {\r\n        var template = Hogan.compile(htmlTemplate),\r\n        result = template.render(data);\r\n\r\n        return  result;\r\n    },\r\n\r\n    successTips: function(msg) {\r\n        alert(msg || '操作成功');\r\n    },\r\n\r\n    errorTips: function(msg) {\r\n        alert(msg || '错了');\r\n    },\r\n\r\n    validate: function(value, type) {\r\n        var value = $.trim(value);\r\n\r\n        if('require' === type) {\r\n            return !!value;\r\n        }\r\n\r\n        if('phone' === type) {\r\n            return /^1\\d{10}$/.test(value);\r\n        }\r\n\r\n        if('email' === type) {\r\n            return /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$/.test(value);\r\n        }\r\n    }\r\n}\r\n\r\nmodule.exports = _mm;\n\n//# sourceURL=webpack:///./src/util/mm.js?");
+eval("var Hogan = __webpack_require__(/*! hogan.js */ \"./node_modules/hogan.js/lib/hogan.js\")\r\nvar conf = {\r\n    serverHost: ''\r\n}\r\n\r\nvar _mm = {\r\n    request: function (param) {\r\n        var _this = this;\r\n        $.ajax({\r\n            type: param.method || 'get',\r\n            url: param.url || '',\r\n            // dataType: param.type || 'json',\r\n            data: param.data || '',\r\n            success: function (result) {\r\n                console.log(\"success \"+result.code);\r\n                if (0 === result.code) {\r\n                    typeof param.success === 'function' && param.success(result.target, result.desc);\r\n\r\n                } else if (10 === result.code) {\r\n                    _this.doLogin();\r\n\r\n                } else if (1 === result.code) {\r\n                    typeof param.error === 'function' && param.error(result.desc);\r\n                }\r\n            },\r\n\r\n            error: function (err) {\r\n                console.log(err);\r\n                typeof param.error === 'function' && param.error(err.statusText);\r\n            }\r\n        });\r\n    },\r\n\r\n    doLogin: function () {\r\n        window.location.href = './user-login.html?redirect=' + encodeURIComponent(window.location.href);\r\n    },\r\n\r\n    goHome: function() {\r\n        window.location.href = './index.html'\r\n    },\r\n\r\n    getServerUrl: function (path) {\r\n        return conf.serverHost + path;\r\n    },\r\n\r\n    getUrlParam: function (name) {\r\n        //happymmall.com/products?keywork=xxx&page=1\r\n        var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)');\r\n        var result = window.location.search.substr(1).match(reg);\r\n\r\n        return result ? decodeURIComponent(result[2]) : null;\r\n    },\r\n\r\n    renderHtml: function(htmlTemplate, data) {\r\n        var template = Hogan.compile(htmlTemplate),\r\n        result = template.render(data);\r\n\r\n        return  result;\r\n    },\r\n\r\n    successTips: function(msg) {\r\n        alert(msg || '操作成功');\r\n    },\r\n\r\n    errorTips: function(msg) {\r\n        alert(msg || '错了');\r\n    },\r\n\r\n    validate: function(value, type) {\r\n        var value = $.trim(value);\r\n\r\n        if('require' === type) {\r\n            return !!value;\r\n        }\r\n\r\n        if('phone' === type) {\r\n            return /^1\\d{10}$/.test(value);\r\n        }\r\n\r\n        if('email' === type) {\r\n            return /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$/.test(value);\r\n        }\r\n    }\r\n}\r\n\r\nmodule.exports = _mm;\n\n//# sourceURL=webpack:///./src/util/mm.js?");
 
 /***/ }),
 

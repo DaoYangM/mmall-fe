@@ -18,8 +18,12 @@ config = {
     entry: {
         'common': ['./src/page/common/index.js'],
         'index': ['./src/page/index/index.js'],
-        'login': ['./src/page/login/index.js'],
-        'result': ['./src/page/result/index.js']
+        'result': ['./src/page/result/index.js'],
+        'user-login': ['./src/page/user-login/index.js'],
+        'user-register': ['./src/page/user-register/index.js'],
+        'user-center': ['./src/page/user-center/index.js'],
+        'user-center-update': ['./src/page/user-center-update/index.js'],
+        'user-password-update': ['./src/page/user-password-update/index.js']
     },
     output: {
         path: 'D:\\Code\\FE\\mmall-fe\\mmall-fe\\dist',
@@ -37,7 +41,10 @@ config = {
         proxy: {
             '/products': {
                 target: 'http://localhost:8080', secure: false
-            }
+            },
+            '/': {
+                target: 'http://localhost:8080', secure: false
+            },
         }
     },
 
@@ -52,14 +59,19 @@ config = {
         new Ex("css/[name].css"),
 
         new HtmlWebpackPlugin(getHtmlConfig('index')),
-        new HtmlWebpackPlugin(getHtmlConfig('result'))
+        new HtmlWebpackPlugin(getHtmlConfig('result')),
+        new HtmlWebpackPlugin(getHtmlConfig('user-login')),
+        new HtmlWebpackPlugin(getHtmlConfig('user-register')),
+        new HtmlWebpackPlugin(getHtmlConfig('user-center')),
+        new HtmlWebpackPlugin(getHtmlConfig('user-center-update')),
+        new HtmlWebpackPlugin(getHtmlConfig('user-password-update'))
     ],
 
     resolve: {
         alias: {
             util: __dirname + '/src/util',
             page: __dirname + '/src/page',
-            server: __dirname + '/src/server',
+            service: __dirname + '/src/service',
             image: __dirname + '/src/image',
             node_modules: __dirname + '/node_modules'
         }
