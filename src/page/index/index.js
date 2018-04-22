@@ -1,19 +1,27 @@
 require('page/common/header/index.js')
+require('util/unslider/index.js')
 require('page/common/nav/index.js')
+require('./index.css')
+
 var _mm = require('util/mm.js');
 var navSide = require('page/common/nav-side/index.js')
+var templateBanner = require('./banner.string')
+
 navSide.init({
     name: 'order-list'
 })
 
+$(function() {
 
-// console.log(_mm.getUrlParam('name'));
+    var bannerHtml =  _mm.renderHtml(templateBanner);
+    $('.banner-con').html(bannerHtml);
 
-// var html = '<div>{{ data }}</div>'
-// var data = {
-//     data: 123
-// }
+    var $slider = $('.banner').unslider({
+        dots: true
+    });
 
-// console.log(_mm.renderHtml(html, data));
-
-// console.log("email: " + _mm.validate(value="498721777@qq.com", type="email"))
+    $('.banner-con .banner-arrow').click(function() {
+        var forward = $(this).hasClass('prev')? 'prev': 'next';
+        $slider.data('unslider')[forward]();
+    })
+});

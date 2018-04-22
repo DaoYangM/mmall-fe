@@ -63,6 +63,10 @@ var _user = {
             success: resolve,
             error: reject
         });
+    },
+
+    getUsername: function() {
+        
     }
 }
 

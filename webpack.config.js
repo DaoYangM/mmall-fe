@@ -42,7 +42,7 @@ config = {
             '/products': {
                 target: 'http://localhost:8080', secure: false
             },
-            '/': {
+            '/users': {
                 target: 'http://localhost:8080', secure: false
             },
         }
