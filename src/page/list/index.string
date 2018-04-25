@@ -1,0 +1,21 @@
+{{#list}}
+    <li class="p-item">
+        <div class="p-img-con">
+            <a href="./detail.html?productid={{id}}" target="_blank" class="link">
+                <img class="p-img" src="http://img.happymmall.com/{{ mainImage }}" alt="{{ name }}" sizes="" srcset="">
+            </a>
+        </div>
+        <div class="p-price-con">
+            <span class="p-price">￥{{price}}</span>
+        </div>
+        <div class="p-name-con">
+            <a href="" class="p-name" href="./detail.html?productid={{id}}">{{name}}</a>
+        </div>
+    </li>
+{{/list}}
+
+{{^list}}
+    <p class="err-tip">
+        找不到商品
+    </p>
+{{/list}}

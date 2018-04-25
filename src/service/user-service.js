@@ -6,7 +6,6 @@ var _user = {
             method: 'post',
             data: userInfo,
             url: _mm.getServerUrl('/users/login'),
-            // dataType: 'json',
             success: resolve,
             error: reject
         });
@@ -17,7 +16,6 @@ var _user = {
             method: 'post',
             data: userInfo,
             url: _mm.getServerUrl('/users/register'),
-            // dataType: 'json',
             success: resolve,
             error: reject
         });
@@ -30,7 +28,6 @@ var _user = {
                 'username' : username
             },
             url: _mm.getServerUrl('/users/check/username'),
-            // dataType: 'json',
             success: resolve,
             error: reject
         });
@@ -66,7 +63,22 @@ var _user = {
     },
 
     getUsername: function() {
-        
+        _mm.request({
+            method: 'put',
+            data: userInfo,
+            url: _mm.getServerUrl('/users/password'),
+            success: resolve,
+            error: reject
+        });
+    },
+
+    logout: function(resolve, reject) {
+        _mm.request({
+            method: 'get',
+            url: '/logout',
+            success: resolve,
+            error: reject
+        });
     }
 }
 

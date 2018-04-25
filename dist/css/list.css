@@ -1,0 +1,147 @@
+.sort-con{
+    overflow: auto;
+}
+
+.sort-con .sort-item{
+    float: left;
+    display: inline-block;
+    position: relative;
+    padding: 0 8px;
+    height: 24px;
+    line-height: 24px;
+    border: 1px solid  #ccc;
+    margin-right: -1px;
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+}
+
+.sort-con .sort-item.active {
+    background: #c60023;
+    border: 1px solid #c60023;
+    color: #fff;
+}
+
+.sort-con .sort-item .fa-sort-desc {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+}
+
+.sort-con .sort-item.asc .fa-sort-desc {
+    opacity: .6;
+}
+
+.sort-con .sort-item.desc .fa-sort-asc {
+    opacity: .6;
+}
+
+.p-list-con {
+    margin-top: 15px;
+    margin-right: -20px;
+    overflow: hidden;
+}
+
+.p-list-con .p-item {
+    position: relative;
+    width: 180px;
+    height: 290px;
+    overflow: hidden;
+    float: left;
+    padding: 10px;
+    margin: 0 20px 20px 0;
+    background: #fff;
+}
+
+.p-list-con .p-item .p-img-con {
+    width: 180px;
+    height: 200px;
+}
+
+.p-list-con .p-item .p-img-con .p-img {
+    width: 100%;
+    height: 100%;
+}
+
+.p-list-con .p-item .p-price-con {
+    height: 30px;
+    line-height: 30px;
+}
+
+.p-list-con .p-item .p-price-con .p-name-con {
+    height: 40px;
+    overflow: hidden;
+}
+
+.p-list-con .p-item .p-name-con .p-name {
+    line-height: 20px;
+    margin-bottom: 10px;
+    color: #666;
+    text-decoration: none;
+}
+
+.p-list-con .p-item .p-name-con .p-name:hover {
+    color: red;
+}
+
+.p-list-con .p-item .p-price-con .p-price {
+    font-size: 16px;
+    color: #e7380d;
+}
+
+.err-tip {
+    height: 60px;
+    line-height: 60px;
+    color: #f60;
+    font-weight: bold;
+    font-size: 30px;
+    text-align: center;
+    background: #eee;
+}.pg-content {
+    text-align: center;
+    color: #333;
+}
+
+.pg-content .pg-item {
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+    padding: 0 15px;
+    margin: 0 2px;
+    border: 1px solid #ccc;
+    background: #eee;
+    cursor: pointer;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.pg-content .pg-item.active {
+    border: 1px solid #f6f6f6;
+    background: none;
+    cursor: auto;
+}
+
+.pg-content .pg-item.disabled {
+    color: #ccc;
+    background: none;
+    cursor: auto;
+}
+
+.pg-content .pg-total {
+    margin-left: 10px;
+    background: none;
+    cursor: auto;
+}.nav-simple {
+    height: 60px;
+    line-height: 60px;
+    border-bottom: 1px solid #ddd;
+    background: #fff;
+}
+
+.nav-simple .logo {
+    font-size: 26px;
+    font-weight: bold;
+    color: #c60023;
+}

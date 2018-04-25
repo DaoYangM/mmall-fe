@@ -1,6 +1,7 @@
 require('page/common/header/index.js')
 require('util/unslider/index.js')
 require('page/common/nav/index.js')
+
 require('./index.css')
 
 var _mm = require('util/mm.js');
@@ -25,3 +26,4 @@ $(function() {
         $slider.data('unslider')[forward]();
     })
 });
+

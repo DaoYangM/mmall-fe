@@ -5,10 +5,11 @@ var _mm = require('util/mm.js')
 var header = {
     init: function() {
         this.bindEvent();
+        this.onLoad();
     },
 
     onLoad: function() {
-        var keyword = _mm.gerUrlParam('keywork');
+        var keyword = _mm.getUrlParam('keyword');
         if(keyword) {
             $('#search-input').val(keyword);
         }
@@ -31,7 +32,7 @@ var header = {
         var keyword = $.trim($('#search-input').val());
         
         if(keyword) {
-            window.location.href = './list.html?keywork=' + keyword;
+            window.location.href = './list.html?keyword=' + keyword;
         } else {
             _mm.goHome();
         }

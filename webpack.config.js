@@ -23,7 +23,10 @@ config = {
         'user-register': ['./src/page/user-register/index.js'],
         'user-center': ['./src/page/user-center/index.js'],
         'user-center-update': ['./src/page/user-center-update/index.js'],
-        'user-password-update': ['./src/page/user-password-update/index.js']
+        'user-password-update': ['./src/page/user-password-update/index.js'],
+        'list': ['./src/page/list/index.js'],
+        'detail': ['./src/page/detail/index.js'],
+        'cart': ['./src/page/cart/index.js']
     },
     output: {
         path: 'D:\\Code\\FE\\mmall-fe\\mmall-fe\\dist',
@@ -45,6 +48,14 @@ config = {
             '/users': {
                 target: 'http://localhost:8080', secure: false
             },
+            '/cart': {
+                target: 'http://localhost:8080', secure: false
+            },
+
+            '/logout': {
+                target: 'http://localhost:8080', secure: false
+            },
+            
         }
     },
 
@@ -64,7 +75,10 @@ config = {
         new HtmlWebpackPlugin(getHtmlConfig('user-register')),
         new HtmlWebpackPlugin(getHtmlConfig('user-center')),
         new HtmlWebpackPlugin(getHtmlConfig('user-center-update')),
-        new HtmlWebpackPlugin(getHtmlConfig('user-password-update'))
+        new HtmlWebpackPlugin(getHtmlConfig('user-password-update')),
+        new HtmlWebpackPlugin(getHtmlConfig('list')),
+        new HtmlWebpackPlugin(getHtmlConfig('detail')),
+        new HtmlWebpackPlugin(getHtmlConfig('cart'))
     ],
 
     resolve: {

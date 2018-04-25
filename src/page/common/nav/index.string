@@ -1,0 +1,16 @@
+{{^isLogin}}
+<span class="user not-login">
+    <span class="link js-login"><a href="./user-login.html" class="link">登录</a></span>
+    <span class="link js-register"><a href="./user-register.html" class="link">注册</a></span>
+</span>
+{{/isLogin}}
+
+{{#isLogin}}
+<span class="user login">
+    <span class="link-text js-login">
+        欢迎,
+        <span class="username">{{username}}</span>
+    </span>
+    <span class="link js-logout">退出</span>
+</span>
+{{/isLogin}}
