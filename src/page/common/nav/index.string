@@ -9,8 +9,8 @@
 <span class="user login">
     <span class="link-text js-login">
         欢迎,
-        <span class="username">{{username}}</span>
+        <span class="username"">{{username}}</span>
     </span>
-    <span class="link js-logout">退出</span>
+    <span class="link js-logout" style="display:inline-block; margin-left: 20px;">退出</span>
 </span>
 {{/isLogin}}

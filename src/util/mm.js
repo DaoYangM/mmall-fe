@@ -17,7 +17,6 @@ var _mm = {
                     typeof param.success === 'function' && param.success(result.target, result.desc);
 
                 } else if (10 === result.code) {
-                    alert("needLogin");
                     _this.doLogin();
 
                 } else if (1 === result.code) {

@@ -52,6 +52,16 @@ var page = {
             }
         });
 
+        $(document).on('input ', '.p-count', function() {
+            var maxCount = _this.data.dataInfo.stock || 1;
+            $pCount = $('.p-count').val();
+            if ($pCount > maxCount) {
+                alert("超出库存数量");
+                $('.p-count').val(maxCount);
+            }
+        }) 
+            
+
         // 加入购物车
         $(document).on('click', '.cart-add', function() {
             _cart.addToCart({

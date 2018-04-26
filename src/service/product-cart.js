@@ -85,6 +85,18 @@ var _cart = {
                 console.log('cart-service' + err);
             }
         })
+    },
+
+    // 修改购物车数量
+    updateProduct: function(cartData, resolve, reject) {
+        _mm.request({
+            method: 'put',
+            data: cartData,
+            contentType:"application/x-www-form-urlencoded",
+            url: _mm.getServerUrl('/cart'),
+            success: resolve,
+            error: reject
+        });
     }
 }
 

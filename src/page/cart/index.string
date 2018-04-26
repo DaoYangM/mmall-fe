@@ -35,7 +35,7 @@
             <td class="cart-cell cell-price">￥ {{productPrice}}</td>
             <td class="cart-cell cell-count">
                 <span class="count-btn minus">-</span>
-                <input type="text" class="count-input" value="{{quantity}}" readonly>
+                <input type="text" class="count-input" value="{{quantity}}"  data-stock={{stock}}>
                 <span class="count-btn plus">+</span>
             </td>
             <td class="cart-cell cell-total">{{productTotalPrice}}</td>

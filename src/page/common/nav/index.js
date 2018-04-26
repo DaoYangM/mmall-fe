@@ -33,7 +33,6 @@ var _nav = {
                 $(document).on('click', '.js-logout', function() {
                     
                     _this.logout((target)=> {
-                        alert(target);
                         _mm.goHome();
                     }, function(ee) {
                         alert(ee);
@@ -83,7 +82,7 @@ var _nav = {
             this.data.cartCount = target;
             html = _mm.renderHtml(templateCart, this.data);
             $('.nav-list').html(html);
-        
+            console.log("getCartCount");
         // 可能需要登录
         }, (err)=> {
             html = _mm.renderHtml(templateCart, this.data);
@@ -106,7 +105,7 @@ var _nav = {
 
             error: function (err) {
                 console.log(err);
-                typeof param.error === 'function' && param.error(err.statusText);
+                // typeof param.error === 'function' && param.error(err.statusText);
             }
         });
     },}

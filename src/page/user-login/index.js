@@ -46,7 +46,6 @@ var page = {
             _user.login(formData, function(target, desc) {
                 console.log(target);
                 formError.hide();
-                alert("登录成功!");
                 window.location.href = _mm.getUrlParam('redirect') || './index.html';
             }, function(err) {
                 formError.show("用户名或密码错误");
